@@ -5,6 +5,10 @@
       "args": [
         "mcp"
       ]
+    },
+    "Sentry": {
+      "url": "https://mcp.sentry.dev/mcp/zapdev/luminaweb",
+      "type": "http"
     }
   }
 }
