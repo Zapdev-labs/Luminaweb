@@ -26,7 +26,7 @@ const LayoutContent = ({
   const { isFullscreen } = useFullscreen();
 
   return (
-    <div className="dark w-full h-screen flex flex-col bg-background text-foreground">
+    <div className="w-full h-screen flex flex-col">
       <Navbar projectId={projectId} />
       <div className="flex-1 flex overflow-hidden">
         {isFullscreen ? (

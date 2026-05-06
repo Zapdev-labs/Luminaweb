@@ -21,6 +21,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import { Id } from "../../../../convex/_generated/dataModel";
 import { useProject, useRenameProject } from "../hooks/use-projects";
@@ -76,14 +77,19 @@ export const Navbar = ({
                   className="w-fit! p-1.5! h-7!"
                   asChild
                 >
-                  <Link href="/projects">
+                  <Link href="/">
                     <Image
                       src="/logo.svg"
                       alt="Logo"
                       width={20}
                       height={20}
                     />
-                    <span className="text-sm font-medium tracking-tight">
+                    <span
+                      className={cn(
+                        "text-sm font-medium",
+                        "[font-family:'Poppins',sans-serif]",
+                      )}
+                    >
                       LuminaWeb
                     </span>
                   </Link>

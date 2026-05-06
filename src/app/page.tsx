@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { MarketingLanding } from "@/features/marketing/components/marketing-landing";
+import { ProjectsView } from "@/features/projects/components/projects-view";
 
 const baseUrl =
   process.env.NEXT_PUBLIC_APP_URL ||
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
 
 export const metadata: Metadata = {
-  title: "LuminaWeb – Meet your first autonomous builder",
+  title: "LuminaWeb – Cloud IDE with AI | Code in Your Browser",
   description:
-    "LuminaWeb helps teams design, ship, and scale software in the browser — from prompt to production with a single conversation.",
+    "LuminaWeb is a browser-based cloud IDE for writing, running, and deploying code. AI suggestions, Cmd+K quick edit, GitHub integration, and WebContainer execution — no installation required.",
   openGraph: {
-    title: "LuminaWeb – Meet your first autonomous builder",
+    title: "LuminaWeb – Cloud IDE with AI | Code in Your Browser",
     description:
-      "Design, ship, and scale software in the browser. Prompt-driven, AI-native, in-browser execution. Start building in seconds.",
+      "Browser-based cloud IDE with AI code suggestions, Cmd+K quick edit, GitHub import/export, and in-browser execution. Start coding in seconds — no install needed.",
     url: baseUrl,
     type: "website",
   },
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 const Home = () => {
-  return <MarketingLanding />;
+  return <ProjectsView />;
 };
 
 export default Home;
