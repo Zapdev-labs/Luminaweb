@@ -52,7 +52,12 @@ export const createScrapeUrlsTool = () => {
             return "No content could be scraped from the provided URLs.";
           }
 
-          return JSON.stringify(results);
+          return results
+            .map(
+              (r) =>
+                `## Source: ${r.url}\n\n${r.content}`
+            )
+            .join("\n\n---\n\n");
         });
       } catch (error) {
         return `Error scraping URLs: ${error instanceof Error ? error.message : "Unknown error"}`;
