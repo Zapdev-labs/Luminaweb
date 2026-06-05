@@ -4,6 +4,9 @@
 
 import * as Sentry from "@sentry/nextjs";
 import posthog from "posthog-js";
+import { initOpenSentry } from "@/lib/open-sentry";
+
+initOpenSentry("browser");
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,

@@ -1,6 +1,7 @@
 import { serve } from "inngest/next";
 
 import { inngest } from "@/inngest/client";
+import { getPublicAppOrigin } from "@/lib/runtime-url";
 import { processMessage } from "@/features/conversations/inngest/process-message";
 import { importGithubRepo } from "@/features/projects/inngest/import-github-repo";
 import { exportToGithub } from "@/features/projects/inngest/export-to-github";
@@ -14,6 +15,8 @@ export const maxDuration = 300;
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
+  serveOrigin: getPublicAppOrigin(),
+  servePath: "/api/inngest",
   functions: [
     processMessage,
     importGithubRepo,
