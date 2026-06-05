@@ -1,0 +1,53 @@
+sentry.server.config.ts
+  s_b89da2717747f7::t_b02f5df53d9b6e 6-8
+package.json
+  s_b89da2717747f7::t_db73a4751f9e84 138
+  s_b89da2717747f7::t_fe81c82fc35703 72
+src/instrumentation-client.ts
+  s_b89da2717747f7::t_b02f5df53d9b6e 7-9
+sentry.edge.config.ts
+  s_b89da2717747f7::t_b02f5df53d9b6e 7-9
+src/app/api/inngest/route.ts
+  s_b89da2717747f7::t_b02f5df53d9b6e 4,18-19
+.gitignore
+  s_b89da2717747f7::t_b02f5df53d9b6e 35
+src/lib/open-sentry.ts
+  s_b89da2717747f7::t_b02f5df53d9b6e 1-48
+src/lib/runtime-url.ts
+  s_b89da2717747f7::t_b02f5df53d9b6e 1-28
+eslint.config.mjs
+  s_b89da2717747f7::t_e02df7a620db04 15
+src/features/projects/components/project-id-view.tsx
+  s_96b799b8705924::t_eeb8e24c64e03a 266
+  s_96b799b8705924::t_54c48978962ccd 5-21,25,34,41-42,45,55,58-59,62,64,68-73,75-100,102-103,105-112,114-123,125-165,171-172,174-185,187-205,208-209,212,218,222-228,230-240,257-265,268-296,298-299,304-305,309-314
+  s_96b799b8705924::t_84221e69214d2c 101,104,113,124,186,300-303
+  s_96b799b8705924::t_9a94ea0a584862 3,26,50,74
+.env.example
+  s_b89da2717747f7::t_b02f5df53d9b6e 1-9
+tsconfig.json
+  s_b89da2717747f7::t_e02df7a620db04 16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "ffe8df9abc3f4c9781c129547200da212782a473",
+  "prompts": {},
+  "sessions": {
+    "s_96b799b8705924": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1698c8e6bffefzZchiHihcX6VG",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Jackson57279 <otdoges@proton.me>"
+    },
+    "s_b89da2717747f7": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_16982a4f2ffeRQTNwEHDUp5NAa",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Jackson57279 <otdoges@proton.me>"
+    }
+  }
+}
