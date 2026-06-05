@@ -1,0 +1,23 @@
+src/components/providers.tsx
+  s_f541b73505c4ac::t_840d50cbd690c4 37-43
+src/lib/convex-client.ts
+  s_f541b73505c4ac::t_840d50cbd690c4 3-13
+package.json
+  s_f541b73505c4ac::t_f6e65661ce3272 89,139
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "722e10f93f72ee571aecfc51142d9d28a6129018",
+  "prompts": {},
+  "sessions": {
+    "s_f541b73505c4ac": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1699374deffeBOFgZg5gABZ6pM",
+        "model": "gpt-5.4-mini-fast"
+      },
+      "human_author": "Jackson57279 <otdoges@proton.me>"
+    }
+  }
+}
