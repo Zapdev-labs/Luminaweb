@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTool } from "@inngest/agent-kit";
 import { firecrawl } from "@/lib/firecrawl";
+import { isSafeExternalUrl } from "@/lib/url-safety";
 
 const paramsSchema = z.object({
   urls: z
@@ -29,6 +30,14 @@ export const createScrapeUrlsTool = () => {
           const results: { url: string; content: string }[] = [];
 
           for (const url of urls) {
+            if (!isSafeExternalUrl(url)) {
+              results.push({
+                url,
+                content: `Blocked URL (not allowed for security reasons): ${url}`,
+              });
+              continue;
+            }
+
             try {
               const result = await firecrawl.scrape(url, {
                 formats: ["markdown"],

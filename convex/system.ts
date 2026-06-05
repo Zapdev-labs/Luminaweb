@@ -3,6 +3,19 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { internal } from "./_generated/api";
 
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  let mismatch = 0;
+  for (let i = 0; i < a.length; i++) {
+    mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+
+  return mismatch === 0;
+}
+
 const validateInternalKey = (key: string) => {
   const internalKey = process.env.POLARIS_CONVEX_INTERNAL_KEY;
 
@@ -10,7 +23,7 @@ const validateInternalKey = (key: string) => {
     throw new Error("POLARIS_CONVEX_INTERNAL_KEY is not configured");
   }
 
-  if (key !== internalKey) {
+  if (!timingSafeEqual(key, internalKey)) {
     throw new Error("Invalid internal key");
   }
 };

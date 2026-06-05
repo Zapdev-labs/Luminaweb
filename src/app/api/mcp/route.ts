@@ -112,7 +112,10 @@ function getClientIp(req: Request): string {
 const SECURITY_HEADERS: Record<string, string> = {
   "X-Content-Type-Options": "nosniff",
   "Cache-Control": "no-store, private",
-  "Access-Control-Allow-Origin": process.env.POLARIS_MCP_ALLOWED_ORIGIN ?? "*",
+  "Access-Control-Allow-Origin":
+    process.env.POLARIS_MCP_ALLOWED_ORIGIN ??
+    process.env.NEXT_PUBLIC_APP_URL ??
+    "https://luminaweb.app",
   "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
   "Access-Control-Allow-Headers":
     "Content-Type, x-api-key, mcp-session-id, mcp-protocol-version, Accept",

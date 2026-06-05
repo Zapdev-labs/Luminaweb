@@ -3,6 +3,11 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
+import {
+  ownershipDeniedResponse,
+  verifyProjectOwnership,
+} from "@/lib/authorize-resource";
+import { sanitizeDeployFiles } from "@/lib/deploy-paths";
 import { convex } from "@/lib/convex-client";
 import { api } from "../../../../../convex/_generated/api";
 import { Id } from "../../../../../convex/_generated/dataModel";
@@ -50,6 +55,16 @@ export async function POST(request: Request) {
   }
 
   const { projectId, token, files, existingNetlifySiteId } = parsed.data;
+
+  const ownership = await verifyProjectOwnership(convex, projectId, userId);
+  if (!ownership.ok) {
+    return ownershipDeniedResponse(ownership);
+  }
+
+  const safeFiles = sanitizeDeployFiles(files);
+  if (!safeFiles) {
+    return NextResponse.json({ error: "Invalid file paths in deployment" }, { status: 400 });
+  }
 
   await convex.mutation(api.system.updateDeploymentStatus, {
     internalKey,
@@ -100,7 +115,7 @@ export async function POST(request: Request) {
     const fileHashes: Record<string, string> = {};
     const normalizedFiles: Record<string, string> = {};
 
-    for (const [filePath, content] of Object.entries(files)) {
+    for (const [filePath, content] of Object.entries(safeFiles)) {
       const normalized = filePath.startsWith("/") ? filePath : `/${filePath}`;
       const hash = createHash("sha1").update(content).digest("hex");
       fileHashes[normalized] = hash;

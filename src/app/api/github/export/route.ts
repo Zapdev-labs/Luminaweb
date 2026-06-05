@@ -3,8 +3,11 @@ import { NextResponse } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 
 import { inngest } from "@/inngest/client";
-
-import { Id } from "../../../../../convex/_generated/dataModel";
+import {
+  ownershipDeniedResponse,
+  verifyProjectOwnership,
+} from "@/lib/authorize-resource";
+import { convex } from "@/lib/convex-client";
 
 const requestSchema = z.object({
   projectId: z.string(),
@@ -25,6 +28,11 @@ export async function POST(request: Request) {
   const body = await request.json();
   const { projectId, repoName, visibility, description } = requestSchema.parse(body);
 
+  const ownership = await verifyProjectOwnership(convex, projectId, userId);
+  if (!ownership.ok) {
+    return ownershipDeniedResponse(ownership);
+  }
+
   const client = await clerkClient();
   const tokens = await client.users.getUserOauthAccessToken(userId, "github");
   const githubToken = tokens.data[0]?.token;
@@ -36,9 +44,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const internalKey = process.env.POLARIS_CONVEX_INTERNAL_KEY;
-
-  if (!internalKey) {
+  if (!process.env.POLARIS_CONVEX_INTERNAL_KEY) {
     return NextResponse.json(
       { error: "Server configuration error" },
       { status: 500 }
@@ -52,8 +58,7 @@ export async function POST(request: Request) {
       repoName,
       visibility,
       description,
-      githubToken,
-      internalKey,
+      userId,
     },
   });
 

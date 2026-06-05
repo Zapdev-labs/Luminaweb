@@ -4,6 +4,7 @@ import { isBinaryFile } from "isbinaryfile";
 import { NonRetriableError } from "inngest";
 
 import { convex } from "@/lib/convex-client";
+import { getGithubTokenForUser } from "@/lib/github-oauth";
 import { inngest } from "@/inngest/client";
 
 import { api } from "../../../../convex/_generated/api";
@@ -13,7 +14,7 @@ interface ImportGithubRepoEvent {
   owner: string;
   repo: string;
   projectId: Id<"projects">;
-  githubToken: string;
+  userId: string;
 }
 
 export const importGithubRepo = inngest.createFunction(
@@ -36,8 +37,13 @@ export const importGithubRepo = inngest.createFunction(
     },
   },
   async ({ event, step }) => {
-    const { owner, repo, projectId, githubToken } =
+    const { owner, repo, projectId, userId } =
       event.data as ImportGithubRepoEvent;
+
+    const githubToken = await getGithubTokenForUser(userId);
+    if (!githubToken) {
+      throw new NonRetriableError("GitHub not connected for user");
+    }
 
     const internalKey = process.env.POLARIS_CONVEX_INTERNAL_KEY;
     if (!internalKey) {

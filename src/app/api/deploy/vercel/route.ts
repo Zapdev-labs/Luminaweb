@@ -2,6 +2,11 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
+import {
+  ownershipDeniedResponse,
+  verifyProjectOwnership,
+} from "@/lib/authorize-resource";
+import { sanitizeDeployFiles } from "@/lib/deploy-paths";
 import { convex } from "@/lib/convex-client";
 import { getPostHogClient } from "@/lib/posthog-server";
 import { api } from "../../../../../convex/_generated/api";
@@ -95,6 +100,16 @@ export async function POST(request: Request) {
 
   const { projectId, token, files, existingVercelProjectId, framework: providedFramework } = parsed.data;
 
+  const ownership = await verifyProjectOwnership(convex, projectId, userId);
+  if (!ownership.ok) {
+    return ownershipDeniedResponse(ownership);
+  }
+
+  const safeFiles = sanitizeDeployFiles(files);
+  if (!safeFiles) {
+    return NextResponse.json({ error: "Invalid file paths in deployment" }, { status: 400 });
+  }
+
   await convex.mutation(api.system.updateDeploymentStatus, {
     internalKey,
     projectId: projectId as Id<"projects">,
@@ -104,7 +119,7 @@ export async function POST(request: Request) {
   });
 
   try {
-    const detectedFramework = providedFramework ?? detectFramework(files);
+    const detectedFramework = providedFramework ?? detectFramework(safeFiles);
 
     let vercelProjectId = existingVercelProjectId;
     let projectName: string | undefined;
@@ -162,7 +177,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const deploymentFiles = Object.entries(files).map(([filePath, content]) => ({
+    const deploymentFiles = Object.entries(safeFiles).map(([filePath, content]) => ({
       file: filePath.startsWith("/") ? filePath.substring(1) : filePath,
       data: content,
     }));

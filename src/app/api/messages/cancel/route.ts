@@ -3,6 +3,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
 import { inngest } from "@/inngest/client";
+import {
+  ownershipDeniedResponse,
+  verifyProjectOwnership,
+} from "@/lib/authorize-resource";
 import { convex } from "@/lib/convex-client";
 
 import { api } from "../../../../../convex/_generated/api";
@@ -21,6 +25,11 @@ export async function POST(request: Request) {
   
   const body = await request.json();
   const { projectId } = requestSchema.parse(body);
+
+  const ownership = await verifyProjectOwnership(convex, projectId, userId);
+  if (!ownership.ok) {
+    return ownershipDeniedResponse(ownership);
+  }
 
   const internalKey = process.env.POLARIS_CONVEX_INTERNAL_KEY;
 

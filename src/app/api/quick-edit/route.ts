@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { firecrawl } from "@/lib/firecrawl";
 import { safeParseAIJSON } from "@/lib/utils";
+import { filterSafeExternalUrls } from "@/lib/url-safety";
 
 const openrouter = createOpenAICompatible({
   name: 'openrouter',
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
     if (!userId) {
       return NextResponse.json(
         { error: "Unauthorized" },
-        { status: 400 }
+        { status: 401 }
       );
     }
 
@@ -75,11 +76,19 @@ export async function POST(request: Request) {
     }
 
     const urls: string[] = instruction.match(URL_REGEX) || [];
+    const safeUrls = filterSafeExternalUrls(urls);
     let documentationContext = "";
 
-    if (urls.length > 0) {
+    if (urls.length > 0 && safeUrls.length !== urls.length) {
+      return NextResponse.json(
+        { error: "One or more URLs in the instruction are not allowed" },
+        { status: 400 }
+      );
+    }
+
+    if (safeUrls.length > 0) {
       const scrapedResults = await Promise.all(
-        urls.map(async (url) => {
+        safeUrls.map(async (url) => {
           try {
             const result = await firecrawl.scrape(url, {
               formats: ["markdown"],

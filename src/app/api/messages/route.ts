@@ -4,8 +4,13 @@ import { auth } from "@clerk/nextjs/server";
 import ky from "ky";
 
 import { inngest } from "@/inngest/client";
+import {
+  ownershipDeniedResponse,
+  verifyConversationOwnership,
+} from "@/lib/authorize-resource";
 import { convex } from "@/lib/convex-client";
 import { getPostHogClient } from "@/lib/posthog-server";
+import { filterAllowedUploadUrls, isAllowedUploadUrl } from "@/lib/url-safety";
 
 import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
@@ -13,8 +18,8 @@ import { Id } from "../../../../convex/_generated/dataModel";
 const requestSchema = z.object({
   conversationId: z.string(),
   message: z.string(),
-  imageUrls: z.array(z.string()).optional().default([]),
-  pdfUrls: z.array(z.string()).optional().default([]),
+  imageUrls: z.array(z.string().url()).max(5).optional().default([]),
+  pdfUrls: z.array(z.string().url()).max(1).optional().default([]),
 });
 
 async function extractPdfText(pdfUrl: string): Promise<string> {
@@ -49,6 +54,30 @@ export async function POST(request: Request) {
 
   const body = await request.json();
   const { conversationId, message, imageUrls, pdfUrls } = requestSchema.parse(body);
+
+  const ownership = await verifyConversationOwnership(
+    convex,
+    conversationId,
+    userId
+  );
+  if (!ownership.ok) {
+    return ownershipDeniedResponse(ownership);
+  }
+
+  const safePdfUrls = filterAllowedUploadUrls(pdfUrls);
+  if (pdfUrls.length > 0 && safePdfUrls.length !== pdfUrls.length) {
+    return NextResponse.json(
+      { error: "One or more PDF URLs are not allowed" },
+      { status: 400 }
+    );
+  }
+
+  if (imageUrls.length > 0 && !imageUrls.every(isAllowedUploadUrl)) {
+    return NextResponse.json(
+      { error: "One or more image URLs are not allowed" },
+      { status: 400 }
+    );
+  }
 
   // Call convex mutation, query
   const conversation = await convex.query(api.system.getConversationById, {
@@ -96,9 +125,9 @@ export async function POST(request: Request) {
 
   // Extract text from PDFs if any
   let combinedMessage = message;
-  if (pdfUrls.length > 0) {
+  if (safePdfUrls.length > 0) {
     const pdfTexts = await Promise.all(
-      pdfUrls.map(async (url) => {
+      safePdfUrls.map(async (url) => {
         const text = await extractPdfText(url);
         return `--- PDF Content ---\n${text}\n--- End PDF ---`;
       })

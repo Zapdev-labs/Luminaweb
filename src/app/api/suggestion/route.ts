@@ -11,6 +11,17 @@ const openrouter = createOpenAICompatible({
   baseURL: 'https://openrouter.ai/api/v1',
 });
 
+const requestSchema = z.object({
+  fileName: z.string().max(500).optional().default(""),
+  code: z.string().max(500_000),
+  currentLine: z.string().max(10_000).optional().default(""),
+  previousLines: z.string().max(50_000).optional().default(""),
+  textBeforeCursor: z.string().max(10_000).optional().default(""),
+  textAfterCursor: z.string().max(10_000).optional().default(""),
+  nextLines: z.string().max(50_000).optional().default(""),
+  lineNumber: z.number().int().min(0).max(1_000_000).optional().default(0),
+});
+
 const suggestionSchema = z.object({
   suggestion: z
     .string()
@@ -62,6 +73,16 @@ export async function POST(request: Request) {
       );
     }
 
+    const body = await request.json();
+    const parsed = requestSchema.safeParse(body);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message ?? "Invalid request" },
+        { status: 400 }
+      );
+    }
+
     const {
       fileName,
       code,
@@ -71,14 +92,7 @@ export async function POST(request: Request) {
       textAfterCursor,
       nextLines,
       lineNumber,
-    } = await request.json();
-
-    if (!code) {
-      return NextResponse.json(
-        { error: "Code is required" },
-        { status: 400 }
-      );
-    }
+    } = parsed.data;
 
     const prompt = SUGGESTION_PROMPT
       .replace("{fileName}", fileName)

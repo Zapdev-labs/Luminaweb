@@ -1,3 +1,5 @@
+import { isValidSkillUrl } from "@/lib/url-safety";
+
 export const CODING_AGENT_SYSTEM_PROMPT = `<identity>
 You are Polaris, an expert AI coding assistant. You help users by reading, creating, updating, and organizing files in their projects.
 </identity>
@@ -278,69 +280,12 @@ export function isTasteSkillName(value: string): value is TasteSkillName {
 const skillCache = new Map<TasteSkillName, { content: string; fetchedAt: number }>();
 const CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
 
-// Allowed domains for skill fetches - prevents SSRF attacks
-const ALLOWED_SKILL_DOMAINS = ["raw.githubusercontent.com"];
-
 function stripFrontmatter(content: string): string {
   if (content.startsWith("---")) {
     const end = content.indexOf("---", 3);
     if (end !== -1) return content.slice(end + 3).trim();
   }
   return content;
-}
-
-/**
- * Validates that a URL is safe to fetch by checking:
- * - URL is from allowed domain (prevents SSRF)
- * - URL uses HTTPS protocol
- * - URL doesn't contain private IP ranges
- * - URL doesn't point to cloud metadata services
- */
-function isValidSkillUrl(url: string): boolean {
-  try {
-    const parsed = new URL(url);
-
-    // Only allow HTTPS
-    if (parsed.protocol !== "https:") {
-      return false;
-    }
-
-    // Only allow specific trusted domains
-    if (!ALLOWED_SKILL_DOMAINS.includes(parsed.hostname)) {
-      return false;
-    }
-
-    // Block URLs with credentials (user:pass@host)
-    if (parsed.username || parsed.password) {
-      return false;
-    }
-
-    // Block common SSRF bypass techniques
-    const blockedPatterns = [
-      /^0\./, // 0.0.0.0/8
-      /^127\./, // 127.0.0.0/8 (localhost)
-      /^10\./, // 10.0.0.0/8 (private)
-      /^172\.(1[6-9]|2[0-9]|3[0-1])\./, // 172.16.0.0/12 (private)
-      /^192\.168\./, // 192.168.0.0/16 (private)
-      /^169\.254\./, // 169.254.0.0/16 (link-local)
-      /^::1$/, // IPv6 localhost
-      /^fc00:/, // IPv6 private
-      /^fe80:/, // IPv6 link-local
-      /\.internal$/,
-      /\.local$/,
-      /\.localhost$/,
-      /metadata\.google\.internal/,
-      /169\.254\.169\.254/, // AWS/Azure/GCP metadata
-    ];
-
-    if (blockedPatterns.some(pattern => pattern.test(parsed.hostname))) {
-      return false;
-    }
-
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 async function fetchSkillFromUrl(url: string, cached: { content: string; fetchedAt: number } | undefined): Promise<string | null> {
