@@ -1,0 +1,88 @@
+src/app/api/messages/route.ts
+  s_8c25c17358a9e8::t_f1550a0082ef57 21-22
+  s_8c25c17358a9e8::t_71a79e12ee46b9 7-10
+  s_8c25c17358a9e8::t_25cc2753f034a5 13
+  s_8c25c17358a9e8::t_38d57d6a94a3e8 58-74
+  s_8c25c17358a9e8::t_efb1067642ae7c 75-81
+  s_8c25c17358a9e8::t_e976d0542f858f 128,130
+src/proxy.ts
+  s_8c25c17358a9e8::t_b87bf25bf8cc2e 1,3-12,16-17,19
+src/lib/github-oauth.ts
+  s_8c25c17358a9e8::t_53d0c085541e4a 1-9
+src/features/conversations/inngest/constants.ts
+  s_8c25c17358a9e8::t_eee743c45fe3b9 1-2
+src/instrumentation-client.ts
+  s_8c25c17358a9e8::t_3aba3f737522c9 32
+src/app/api/mcp/route.ts
+  s_8c25c17358a9e8::t_acc12702075347 115-118
+src/features/projects/inngest/export-to-github.ts
+  s_8c25c17358a9e8::t_49c76da6e361bf 17
+  s_8c25c17358a9e8::t_8e577e8a228019 6
+  s_8c25c17358a9e8::t_9507a07d7fb07d 77,83-88
+src/lib/url-safety.ts
+  s_8c25c17358a9e8::t_a3b8daadd609c3 1-78
+convex/system.ts
+  s_8c25c17358a9e8::t_8d892c115d7e3e 6-18,26
+next.config.ts
+  s_8c25c17358a9e8::t_3206c1779fac52 16-35
+src/features/conversations/inngest/tools/scrape-urls.ts
+  s_8c25c17358a9e8::t_dc92efdd300e29 33-40
+  s_8c25c17358a9e8::t_0e70c0992b8ac1 4
+src/app/api/quick-edit/route.ts
+  s_8c25c17358a9e8::t_251e3e7c8edfa1 60
+  s_8c25c17358a9e8::t_390dc737be2d9f 8
+  s_8c25c17358a9e8::t_e065b3f6ebe56d 79,82-89,91
+test/url-safety.test.ts
+  s_8c25c17358a9e8::t_37f18a09ad1ffe 1-46
+src/app/api/github/import/route.ts
+  s_8c25c17358a9e8::t_50381e25a19010 75
+src/app/api/messages/cancel/route.ts
+  s_8c25c17358a9e8::t_16fbf1466bae79 29-33
+  s_8c25c17358a9e8::t_fa5f31a732f3fd 6-9
+src/app/api/deploy/netlify/route.ts
+  s_8c25c17358a9e8::t_342bd6c0df84e2 118
+  s_8c25c17358a9e8::t_de5cf83c724050 59-68
+  s_8c25c17358a9e8::t_0f47261a862980 6-10
+src/app/api/deploy/vercel/route.ts
+  s_8c25c17358a9e8::t_6d03fc1c2dd1da 180
+  s_8c25c17358a9e8::t_049d35b4b76883 5-9
+  s_8c25c17358a9e8::t_5a1cf123e1ae88 122
+  s_8c25c17358a9e8::t_e34ba45c7acae7 103-112
+src/app/api/suggestion/route.ts
+  s_8c25c17358a9e8::t_687992d7291506 14-24
+  s_8c25c17358a9e8::t_f9ae2201b34382 76-85,95
+src/app/api/github/export/cancel/route.ts
+  s_8c25c17358a9e8::t_e35dc1c87e665f 5-8
+  s_8c25c17358a9e8::t_ca05191273e632 29-33
+src/app/api/github/export/reset/route.ts
+  s_8c25c17358a9e8::t_1c0ab78e12b71f 5-8
+  s_8c25c17358a9e8::t_96cd631237e329 28-32
+src/lib/authorize-resource.ts
+  s_8c25c17358a9e8::t_02e0557119eacf 1-61
+src/features/projects/inngest/import-github-repo.ts
+  s_8c25c17358a9e8::t_ec7916137113e7 40,43-46
+  s_8c25c17358a9e8::t_e1f0ddffe385ec 7
+  s_8c25c17358a9e8::t_662506c00076ef 17
+src/app/api/github/export/route.ts
+  s_8c25c17358a9e8::t_49afc265ea4fa2 31-35
+  s_8c25c17358a9e8::t_0b2765fce779d5 47,61
+  s_8c25c17358a9e8::t_5f4cffcf99cdb2 6-10
+src/lib/deploy-paths.ts
+  s_8c25c17358a9e8::t_67677f7718fd64 1-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "dd3a1281f8a377c46e581d4d643530925a6a6d7d",
+  "prompts": {},
+  "sessions": {
+    "s_8c25c17358a9e8": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "17005d35-4d51-4912-9460-7efcbd25c457",
+        "model": "default"
+      },
+      "human_author": "Jackson57279 <otdoges@proton.me>"
+    }
+  }
+}
