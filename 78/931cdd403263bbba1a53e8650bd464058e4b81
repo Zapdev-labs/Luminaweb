@@ -1,0 +1,23 @@
+src/features/conversations/inngest/workers/skill-router.ts
+  s_d8cf221fa23509::t_3165f1e42e9cf4 9,103-117
+src/lib/ai-models.ts
+  s_d8cf221fa23509::t_e7774909faf9b9 6,9
+test/openrouter-integration.test.ts
+  s_d8cf221fa23509::t_5ba2b5b1c75691 131,133,136
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "78931cdd403263bbba1a53e8650bd464058e4b81",
+  "prompts": {},
+  "sessions": {
+    "s_d8cf221fa23509": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_1699889c7ffeofrk5ad0Ji0lHb",
+        "model": "gpt-5.5"
+      },
+      "human_author": "Jackson57279 <otdoges@proton.me>"
+    }
+  }
+}
