@@ -3,16 +3,10 @@ import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 
 export type AgentRole = "manager" | "research" | "review" | "title" | "skill-router" | "enhance";
 
-const MANAGER_MODELS = [
-  // Prefer DeepSeek for long coding loops while still sampling Kimi sometimes.
-  "deepseek/deepseek-v4-pro",
-  "deepseek/deepseek-v4-pro",
-  "deepseek/deepseek-v4-pro",
-  "moonshotai/kimi-k2.6",
-];
+const GENERATION_MODEL = "minimax/minimax-m3";
 
 const MODEL_DEFAULTS: Record<AgentRole, string> = {
-  manager: MANAGER_MODELS[0],
+  manager: GENERATION_MODEL,
   research: "x-ai/grok-4.1-fast",
   review: "x-ai/grok-4.1-fast",
   title: "x-ai/grok-4.1-fast",
@@ -34,10 +28,6 @@ export function getModelId(role: AgentRole): string {
   if (envValue) return envValue;
   if (role === "manager" && process.env.POLARIS_CODING_MODEL) {
     return process.env.POLARIS_CODING_MODEL;
-  }
-  if (role === "manager") {
-    const randomIndex = Math.floor(Math.random() * MANAGER_MODELS.length);
-    return MANAGER_MODELS[randomIndex];
   }
   return MODEL_DEFAULTS[role];
 }

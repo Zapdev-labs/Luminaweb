@@ -128,12 +128,12 @@ describe("OpenRouter Model Configuration", () => {
     expect(capturedCalls[0].modelId).toBe("qwen/qwen3-coder-next");
   });
 
-  it("conversation processing defaults to Gemini 3.1 Pro Preview", async () => {
+  it("conversation generation defaults to Minimax M3", async () => {
     const source = await Bun.file(
-      "src/features/conversations/inngest/process-message.ts",
+      "src/lib/ai-models.ts",
     ).text();
     expect(source).toContain("process.env.POLARIS_CODING_MODEL");
-    expect(source).toContain("google/gemini-3.1-pro-preview");
+    expect(source).toContain("minimax/minimax-m3");
   });
 
   it("all routes configure OpenRouter with correct baseURL", async () => {

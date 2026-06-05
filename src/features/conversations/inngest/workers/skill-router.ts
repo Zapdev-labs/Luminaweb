@@ -6,6 +6,7 @@ import { extractJSONFromMarkdown } from "@/lib/utils";
 import {
   SKILL_ROUTER_PROMPT,
   guessTasteSkillFromMessage,
+  isUIGenerationRequest,
   isTasteSkillName,
   type TasteSkillName,
 } from "../constants";
@@ -95,6 +96,25 @@ export async function runSkillRouter(
     return {
       skill: guess,
       reason: "AI router unavailable; using syntactic guess.",
+      source: "fallback-guess",
+    };
+  }
+
+  if (input.hasImages) {
+    return {
+      skill: "image-to-code",
+      reason: "AI router unavailable; reference images should use image-to-code.",
+      source: "fallback-guess",
+    };
+  }
+
+  if (
+    isUIGenerationRequest(input.userMessage) ||
+    isUIGenerationRequest(input.enhancedMessage)
+  ) {
+    return {
+      skill: "design-taste-frontend",
+      reason: "AI router unavailable; defaulting UI generation to the frontend taste skill.",
       source: "fallback-guess",
     };
   }
